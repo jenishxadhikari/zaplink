@@ -9,11 +9,13 @@ const envSchema = z.object({
     .enum(['development', 'production'], { message: 'NODE_ENV is required' })
     .optional()
     .default('development'),
-  ALLOWED_ORIGINS: z.array(z.string()).nonempty()
+  ALLOWED_ORIGINS: z.array(z.string()).nonempty(),
+  DATABASE_URL: z.string({ message: "DATABASE_URL is required" }).nonempty()
 })
 
 export const env = envSchema.parse({
   PORT: process.env.PORT,
   NODE_ENV: process.env.NODE_ENV,
-  ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS?.split(",") ?? []
+  ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS?.split(",") ?? [],
+  DATABASE_URL: process.env.DATABASE_URL
 })
