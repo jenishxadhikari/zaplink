@@ -51,6 +51,7 @@ const config = {
 
     // 8. Feature-Specific & App Level
     '^@/features(/.*)?$',
+    '^@/pages(/.*)?$',
     '^@/app(/.*)?$',
 
     '',

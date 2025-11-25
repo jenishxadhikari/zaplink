@@ -1,10 +1,29 @@
-import { Button } from '@/components/ui/button'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+
+import { Main } from '@/components/layout/main'
+
+import Login from '@/pages/auth/login'
+import Register from '@/pages/auth/register'
+import ForgotPassword from '@/pages/auth/forgot-password'
+import ResetPassword from '@/pages/auth/reset-password'
+import VerifyOTP from '@/pages/auth/verify-otp'
+import VerifyEmail from '@/pages/auth/verify-email'
+import Home from '@/pages/home'
 
 export default function App() {
   return (
-    <main className="p-10">
-      <h1>Zaplink</h1>
-      <Button>Hello World!</Button>
-    </main>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Main />}>
+          <Route element={<Home />} path="" />
+          <Route element={<Login />} path="login" />
+          <Route element={<Register />} path="register" />
+          <Route element={<ForgotPassword />} path="password/forgot" />
+          <Route element={<ResetPassword />} path="password/reset" />
+          <Route element={<VerifyEmail />} path="email/verify" />
+          <Route element={<VerifyOTP />} path="2fa/verify" />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   )
 }
