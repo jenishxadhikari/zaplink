@@ -4,7 +4,7 @@ import { env } from "@/config/env";
 
 export const corsOptions: CorsOptions = {
   origin(requestOrigin, callback){
-    if(requestOrigin && env.ALLOWED_ORIGINS.includes(requestOrigin)){
+    if(requestOrigin === env.APP_ORIGIN){
       callback(null, true)
     } else {
       callback(
