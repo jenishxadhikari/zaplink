@@ -9,6 +9,7 @@ import ResetPassword from '@/pages/auth/reset-password'
 import VerifyOTP from '@/pages/auth/verify-otp'
 import VerifyEmail from '@/pages/auth/verify-email'
 import Home from '@/pages/home'
+import Dashboard from '@/pages/protected/dashboard'
 
 export default function App() {
   return (
@@ -22,6 +23,10 @@ export default function App() {
           <Route element={<ResetPassword />} path="password/reset" />
           <Route element={<VerifyEmail />} path="email/verify" />
           <Route element={<VerifyOTP />} path="2fa/verify" />
+        </Route>
+
+        <Route>
+          <Route element={<Dashboard />} path="dashboard" />
         </Route>
       </Routes>
     </BrowserRouter>

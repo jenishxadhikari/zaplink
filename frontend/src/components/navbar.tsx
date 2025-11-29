@@ -32,7 +32,7 @@ export function Navbar() {
           </Link>
         ) : (
           <Link
-            to="/"
+            to="/login"
             className={buttonVariants({
               size: 'sm'
             })}
