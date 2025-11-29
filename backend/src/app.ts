@@ -10,6 +10,7 @@ import { corsOptions } from '@/lib/cors'
 import { ApiError, CustomError } from '@/lib/api-error'
 
 import { healthRouter } from '@/features/health/health.routes'
+import { AuthRouter } from '@/features/auth/auth.route'
 
 const app = express()
 
@@ -22,11 +23,14 @@ app.use(compression())
 
 app.use("/api/v1", healthRouter)
 
+app.use("/api/v1", AuthRouter)
+
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+  console.log(error);
   if(error instanceof ApiError){
-    ApiError.handle(error, res)
+    return ApiError.handle(error, res)
   }
-  ApiError.handle(new CustomError.InternalServerError(), res)
+  return ApiError.handle(new CustomError.InternalServerError(), res)
 })
 
 export { app }
