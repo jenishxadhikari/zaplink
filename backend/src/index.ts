@@ -5,14 +5,14 @@ import { env } from '@/config/env'
 (async function () {
   try {
     await connectDB()
-    
+
     app.listen(env.PORT, () => {
       console.log(`Server running at port: ${env.PORT}`)
     })
   } catch (error) {
-    console.log('Failed to start server', error);
+    console.log('Failed to start server', error)
 
-    if (env.NODE_ENV === "production") {
+    if (env.NODE_ENV === 'production') {
       process.exit(1)
     }
   }
@@ -20,11 +20,11 @@ import { env } from '@/config/env'
 
 const serverTermination = async (signal: NodeJS.Signals) => {
   try {
-    console.log('Server Shutdown', signal);
+    console.log('Server Shutdown', signal)
 
     process.exit(0)
   } catch (error) {
-    console.log('Error during server shutdown', error);
+    console.log('Error during server shutdown', error)
   }
 }
 

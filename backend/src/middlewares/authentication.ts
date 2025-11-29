@@ -1,9 +1,9 @@
-import type { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from 'express'
 
-import { CustomError } from "@/lib/api-error";
-import { AuthService, TokenPayload } from "@/features/auth/auth.service";
-import { statusCodes } from "@/config/http-status-codes";
-import { UserQueries } from "@/features/user/user.queries";
+import { CustomError } from '@/lib/api-error'
+import { StatusCodes } from '@/config/http-status-codes'
+import { AuthService, TokenPayload } from '@/features/auth/auth.service'
+import { UserQueries } from '@/features/user/user.queries'
 
 export async function authentication(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization
@@ -16,21 +16,20 @@ export async function authentication(req: Request, res: Response, next: NextFunc
   try {
     payload = AuthService.verifyAccessToken(accessToken)
   } catch (error) {
-    return res.status(statusCodes.UNAUTHORIZED).json({
-      message: "Your session has expired. Please login again."
+    return res.status(StatusCodes.UNAUTHORIZED).json({
+      message: 'Your session has expired. Please login again.'
     })
   }
 
   const user = await UserQueries.getUserById(payload.id)
-  console.log(user);
-  
+  console.log(user)
+
   if (!user) {
-    return res.status(statusCodes.UNAUTHORIZED).json({
-      message: "Please login again to continue."
+    return res.status(StatusCodes.UNAUTHORIZED).json({
+      message: 'Please login again to continue.'
     })
   }
 
   req.user = user
   next()
 }
-

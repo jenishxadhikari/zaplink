@@ -1,26 +1,26 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose'
 
-import type { Request, Response } from "express";
+import type { Request, Response } from 'express'
 
-import { statusCodes } from "@/config/http-status-codes";
-import { CustomError } from "@/lib/api-error";
+import { StatusCodes } from '@/config/http-status-codes'
+import { CustomError } from '@/lib/api-error'
+import { asyncHandler } from '@/lib/async-handler'
 
 /*
     GET /api/v1/health - GET Health
 */
-export async function health(req: Request, res: Response) {
-  try {
-    const status = mongoose.connection.readyState === 1
-    
-    if (!status) {
-      throw new CustomError.InternalServerError('Database connection failed.')
-    }
+const health = asyncHandler(async (req: Request, res: Response) => {
+  const status = mongoose.connection.readyState === 1
 
-    return res.status(statusCodes.OK).json({
-      message: "Server Active."
-    })
-  } catch (error) {
-    console.log('[HEALTH_ERROR] : ', error);
-    throw new CustomError.InternalServerError('Failed to fetch health status.')
+  if (!status) {
+    throw new CustomError.InternalServerError('Database connection failed.')
   }
+
+  return res.status(StatusCodes.OK).json({
+    message: 'Server Active.'
+  })
+})
+
+export const HealthController = {
+  health
 }

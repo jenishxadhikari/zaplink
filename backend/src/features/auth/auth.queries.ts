@@ -1,6 +1,6 @@
-import { Token } from "@/db/schema/token";
+import { Token } from '@/db/schema/token'
 
-import type { Types } from "mongoose";
+import type { Types } from 'mongoose'
 
 type CreateToken = {
   token: string

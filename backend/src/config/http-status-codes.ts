@@ -1,18 +1,18 @@
-export const statusCodes = {
+export const StatusCodes = {
   // 2xx
   OK: 200,
   CREATED: 201,
 
   // 3xx
   MOVED_PERMANENTLY: 301,
-  
+
   // 4xx
   BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
   FORBIDDEN: 403,
   NOT_FOUND: 404,
   TOO_MANY_REQUESTS: 429,
-  
+
   // 5xx
   INTERNAL_SERVER_ERROR: 500
 }

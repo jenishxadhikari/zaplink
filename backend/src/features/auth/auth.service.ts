@@ -4,9 +4,10 @@ import type { Types } from 'mongoose'
 
 import { env } from '@/config/env'
 
-import { AuthQueries } from './auth.queries'
 import { sendMail } from '@/lib/mail'
-import { MailTemplate } from '@/lib/mail-template'
+import { mailTemplate } from '@/lib/mail-template'
+
+import { AuthQueries } from './auth.queries'
 
 export type TokenPayload = {
   id: string
@@ -57,7 +58,7 @@ async function sendVerificationMail({ id, email }: Mail) {
     expiresAt: new Date(Date.now() + 15 * 60 * 60 * 1000)
   })
 
-  const { subject, html } = MailTemplate.verifyEmailTemplate(token)
+  const { subject, html } = mailTemplate.verifyEmailTemplate(token)
 
   await sendMail({
     to: email,
@@ -74,7 +75,7 @@ async function sendResetPasswordMail({ id, email }: Mail) {
     expiresAt: new Date(Date.now() + 15 * 60 * 60 * 1000)
   })
 
-  const { subject, html } = MailTemplate.resetPasswordTemplate(token)
+  const { subject, html } = mailTemplate.resetPasswordTemplate(token)
 
   await sendMail({
     to: email,

@@ -9,11 +9,11 @@ const envSchema = z.object({
     .enum(['development', 'production'], { error: 'NODE_ENV is required.' })
     .optional()
     .default('development'),
-  APP_ORIGIN: z.string({ error: "APP_ORIGIN is required." }).nonempty(),
-  DATABASE_URL: z.string({ error: "DATABASE_URL is required." }).nonempty(),
-  SECRET_KEY: z.string({ error: "SECRET_KEY is required." }).nonempty(),
-  RESEND_API_KEY: z.string({ error: "RESEND_API_KEY is required." }).nonempty(),
-  RESEND_MAIL: z.string({ error: "RESEND_MAIL is required." }).nonempty(),
+  APP_ORIGIN: z.string({ error: 'APP_ORIGIN is required.' }).nonempty(),
+  DATABASE_URL: z.string({ error: 'DATABASE_URL is required.' }).nonempty(),
+  SECRET_KEY: z.string({ error: 'SECRET_KEY is required.' }).nonempty(),
+  RESEND_API_KEY: z.string({ error: 'RESEND_API_KEY is required.' }).nonempty(),
+  RESEND_MAIL: z.string({ error: 'RESEND_MAIL is required.' }).nonempty()
 })
 
 export const env = envSchema.parse({

@@ -1,6 +1,6 @@
-import { User } from "@/db/schema/user";
+import { User } from '@/db/schema/user'
 
-import { UserSchema } from "./user.schema";
+import { UserSchema } from './user.schema'
 
 async function getUserByEmail(email: string) {
   const user = await User.findOne({ email })
@@ -39,7 +39,6 @@ async function updateUser({ id, password, isVerified }: UpdateUser) {
     isVerified
   })
 }
-
 
 export const UserQueries = {
   getUserByEmail,

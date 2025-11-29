@@ -1,9 +1,7 @@
-import { env } from "@/config/env";
+import { env } from '@/config/env'
 
-const verifyEmailTemplate = (
-  token: string
-) => ({
-  subject: "Confirm your Zaplink account.",
+const verifyEmailTemplate = (token: string) => ({
+  subject: 'Confirm your Zaplink account.',
   html: `
     <html><head><style>
       body, html { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333333; }
@@ -29,13 +27,11 @@ const verifyEmailTemplate = (
         </div>
       </div>
     </body></html>
-  `,
-});
+  `
+})
 
-const verifyOTPTemplate = (
-  otp: string
-) => ({
-  subject: "OTP code for your Zaplink account.",
+const verifyOTPTemplate = (otp: string) => ({
+  subject: 'OTP code for your Zaplink account.',
   html: `
     <html><head><style>
       body, html { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333333; }
@@ -61,13 +57,11 @@ const verifyOTPTemplate = (
         </div>
       </div>
     </body></html>
-  `,
-});
+  `
+})
 
-const resetPasswordTemplate = (
-  token: string
-) => ({
-  subject: "Reset Your Password for Zaplink account.",
+const resetPasswordTemplate = (token: string) => ({
+  subject: 'Reset Your Password for Zaplink account.',
   html: `
     <html><head><style>
       body, html { margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333333; }
@@ -93,10 +87,10 @@ const resetPasswordTemplate = (
         </div>
       </div>
     </body></html>
-  `,
-});
+  `
+})
 
-export const MailTemplate = {
+export const mailTemplate = {
   verifyEmailTemplate,
   verifyOTPTemplate,
   resetPasswordTemplate

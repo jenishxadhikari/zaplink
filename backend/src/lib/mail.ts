@@ -1,8 +1,8 @@
-import { Resend } from 'resend';
+import { Resend } from 'resend'
 
-import { env } from '@/config/env';
+import { env } from '@/config/env'
 
-const resend = new Resend(env.RESEND_API_KEY);
+const resend = new Resend(env.RESEND_API_KEY)
 
 type SendMail = {
   to: string
@@ -15,6 +15,6 @@ export async function sendMail({ to, subject, html }: SendMail) {
     from: env.RESEND_MAIL,
     to: to,
     subject: subject,
-    html: html,
-  });
+    html: html
+  })
 }
