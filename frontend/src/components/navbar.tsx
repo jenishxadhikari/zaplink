@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom'
 
 import { MaxWidthWrapper } from './max-width-wrapper'
 import { buttonVariants } from './ui/button'
+import { useAuthContext } from '@/context/auth-provider'
 
 export function Navbar() {
-  const isAuthenticated = false
+  const { isAuthenticated } = useAuthContext()
+  
   return (
     <nav className="h-15 border-b">
       <MaxWidthWrapper className="flex items-center justify-between">
@@ -21,7 +23,7 @@ export function Navbar() {
         </Link>
         {isAuthenticated ? (
           <Link
-            to="/"
+            to="/dashboard"
             className={buttonVariants({
               size: 'sm',
               className: 'group gap-x-1'

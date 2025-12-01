@@ -12,35 +12,47 @@ import { Input } from '@/components/ui/input'
 import { ErrorAlert } from '@/components/error-alert'
 import { SubmitButton } from '@/components/submit-button'
 
-import { loginSchema } from '@/features/auth/schema'
+import { forgotPasswordSchema } from '@/features/auth/schema'
 
 import { AuthWrapper } from './auth-wrapper'
 import { SuccessAlert } from '@/components/success-alert'
+import { forgotPasswordMutation } from '@/lib/api'
+import { useMutation } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 
 export function ForgotPasswordForm({ className, ...props }: React.ComponentProps<'div'>) {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
 
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<z.infer<typeof forgotPasswordSchema>>({
+    resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
-      email: '',
-      password: ''
+      email: ''
     }
   })
 
-  async function onSubmit(data: z.infer<typeof loginSchema>) {
+  const { mutate, isPending } = useMutation({
+    mutationFn: forgotPasswordMutation
+  })
+
+  async function onSubmit(data: z.infer<typeof forgotPasswordSchema>) {
     setError(null)
     setSuccess(null)
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log(data)
-        resolve(true)
-      }, 2000)
+    mutate(data, {
+      onSuccess: (response) => {
+        setSuccess(response.data.message)
+        form.reset()
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          setError(error.response?.data?.message)
+        } else {
+          setError("Something went wrong")
+        }
+      }
     })
-  }
 
-  const isPending = form.formState.isSubmitting
+  }
 
   return (
     <div className={cn('mx-auto flex max-w-sm flex-col items-center gap-6', className)} {...props}>

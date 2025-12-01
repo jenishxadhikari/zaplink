@@ -18,6 +18,9 @@ import { SuccessAlert } from '@/components/success-alert'
 import { registerSchema } from '@/features/auth/schema'
 
 import { AuthWrapper } from './auth-wrapper'
+import { useMutation } from '@tanstack/react-query'
+import { registerMutation } from '@/lib/api'
+import { AxiosError } from 'axios'
 
 export function RegisterForm({ className, ...props }: React.ComponentProps<'div'>) {
   const [error, setError] = useState<string | null>(null)
@@ -35,20 +38,29 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<'div'
     }
   })
 
+  const { mutate, isPending } = useMutation({
+    mutationFn: registerMutation
+  })
+
   async function onSubmit(data: z.infer<typeof registerSchema>) {
     setError(null)
     setSuccess(null)
     setShowPassword(false)
     setShowConfirmPassword(false)
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log(data)
-        resolve(true)
-      }, 2000)
+    mutate(data, {
+      onSuccess: (response) => {
+        setSuccess(response.data.message)
+        form.reset()
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          setError(error.response?.data?.message)
+        } else {
+          setError("Something went wrong")
+        }
+      }
     })
   }
-
-  const isPending = form.formState.isSubmitting
 
   return (
     <div className={cn('mx-auto flex max-w-sm flex-col items-center gap-6', className)} {...props}>

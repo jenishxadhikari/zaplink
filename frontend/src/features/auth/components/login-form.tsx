@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, EyeOff } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { z } from 'zod'
 
 import { cn } from '@/lib/utils'
@@ -17,8 +17,16 @@ import { SubmitButton } from '@/components/submit-button'
 import { loginSchema } from '@/features/auth/schema'
 
 import { AuthWrapper } from './auth-wrapper'
+import { loginMutation } from '@/lib/api'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
+import { AxiosError } from 'axios'
 
 export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const redirectTo = searchParams.get('redirectTo') ?? '/'
+
   const [error, setError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
 
@@ -30,17 +38,32 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
     }
   })
 
+  const queryClient = useQueryClient()
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: loginMutation
+  })
+
   async function onSubmit(data: z.infer<typeof loginSchema>) {
     setError(null)
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log(data)
-        resolve(true)
-      }, 2000)
+    setShowPassword(false)
+    mutate(data, {
+      onSuccess: (response) => {
+        toast.success(response.data.message)
+        localStorage.setItem('accessToken', response.data.accessToken)
+        queryClient.resetQueries({ queryKey: ['auth'] })
+        form.reset()
+        navigate(redirectTo)
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          setError(error.response?.data?.message)
+        } else {
+          setError("Something went wrong")
+        }
+      }
     })
   }
-
-  const isPending = form.formState.isSubmitting
 
   return (
     <div className={cn('mx-auto flex max-w-sm flex-col items-center gap-6', className)} {...props}>
