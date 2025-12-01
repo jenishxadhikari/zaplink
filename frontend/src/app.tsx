@@ -2,16 +2,16 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import { Main } from '@/components/layout/main'
 
+import ForgotPassword from '@/pages/auth/forgot-password'
 import Login from '@/pages/auth/login'
 import Register from '@/pages/auth/register'
-import ForgotPassword from '@/pages/auth/forgot-password'
 import ResetPassword from '@/pages/auth/reset-password'
-import VerifyOTP from '@/pages/auth/verify-otp'
 import VerifyEmail from '@/pages/auth/verify-email'
+import VerifyOTP from '@/pages/auth/verify-otp'
 import Home from '@/pages/home'
 import Dashboard from '@/pages/protected/dashboard'
-import PublicRoute from '@/routes/public.route'
 import ProtectedRoute from '@/routes/protected.route'
+import PublicRoute from '@/routes/public.route'
 
 export default function App() {
   return (

@@ -7,7 +7,7 @@ export function Main() {
   return (
     <div className="flex min-h-screen flex-col antialiased">
       <Navbar />
-      <main className="flex-1 flex flex-col">
+      <main className="flex flex-1 flex-col">
         <Outlet />
       </main>
       <Footer />

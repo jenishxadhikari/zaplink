@@ -1,11 +1,14 @@
 import { useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import { Eye, EyeOff } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { z } from 'zod'
 
+import { registerMutation } from '@/lib/api'
 import { cn } from '@/lib/utils'
 
 import { Button } from '@/components/ui/button'
@@ -18,9 +21,6 @@ import { SuccessAlert } from '@/components/success-alert'
 import { registerSchema } from '@/features/auth/schema'
 
 import { AuthWrapper } from './auth-wrapper'
-import { useMutation } from '@tanstack/react-query'
-import { registerMutation } from '@/lib/api'
-import { AxiosError } from 'axios'
 
 export function RegisterForm({ className, ...props }: React.ComponentProps<'div'>) {
   const [error, setError] = useState<string | null>(null)
@@ -56,7 +56,7 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<'div'
         if (error instanceof AxiosError) {
           setError(error.response?.data?.message)
         } else {
-          setError("Something went wrong")
+          setError('Something went wrong')
         }
       }
     })
@@ -119,7 +119,7 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<'div'
                       id={field.name}
                       aria-invalid={fieldState.invalid}
                       placeholder="********"
-                      type={showPassword ? "text" : "password"}
+                      type={showPassword ? 'text' : 'password'}
                       autoComplete="off"
                       disabled={isPending}
                     />
@@ -150,7 +150,7 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<'div'
                       id={field.name}
                       aria-invalid={fieldState.invalid}
                       placeholder="********"
-                      type={showConfirmPassword ? "text" : "password"}
+                      type={showConfirmPassword ? 'text' : 'password'}
                       autoComplete="off"
                       disabled={isPending}
                     />

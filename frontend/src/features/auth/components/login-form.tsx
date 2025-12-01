@@ -1,11 +1,15 @@
 import { useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import { Eye, EyeOff } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
+import { loginMutation } from '@/lib/api'
 import { cn } from '@/lib/utils'
 
 import { Button } from '@/components/ui/button'
@@ -17,10 +21,6 @@ import { SubmitButton } from '@/components/submit-button'
 import { loginSchema } from '@/features/auth/schema'
 
 import { AuthWrapper } from './auth-wrapper'
-import { loginMutation } from '@/lib/api'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
-import { AxiosError } from 'axios'
 
 export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) {
   const navigate = useNavigate()
@@ -59,7 +59,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
         if (error instanceof AxiosError) {
           setError(error.response?.data?.message)
         } else {
-          setError("Something went wrong")
+          setError('Something went wrong')
         }
       }
     })
@@ -112,7 +112,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
                       id={field.name}
                       aria-invalid={fieldState.invalid}
                       placeholder="********"
-                      type={showPassword ? "text" : "password"}
+                      type={showPassword ? 'text' : 'password'}
                       autoComplete="off"
                       disabled={isPending}
                     />

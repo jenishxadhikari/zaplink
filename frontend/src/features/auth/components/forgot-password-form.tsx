@@ -1,24 +1,24 @@
 import { useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import { Controller, useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { z } from 'zod'
 
+import { forgotPasswordMutation } from '@/lib/api'
 import { cn } from '@/lib/utils'
 
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { ErrorAlert } from '@/components/error-alert'
 import { SubmitButton } from '@/components/submit-button'
+import { SuccessAlert } from '@/components/success-alert'
 
 import { forgotPasswordSchema } from '@/features/auth/schema'
 
 import { AuthWrapper } from './auth-wrapper'
-import { SuccessAlert } from '@/components/success-alert'
-import { forgotPasswordMutation } from '@/lib/api'
-import { useMutation } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
 
 export function ForgotPasswordForm({ className, ...props }: React.ComponentProps<'div'>) {
   const [error, setError] = useState<string | null>(null)
@@ -47,11 +47,10 @@ export function ForgotPasswordForm({ className, ...props }: React.ComponentProps
         if (error instanceof AxiosError) {
           setError(error.response?.data?.message)
         } else {
-          setError("Something went wrong")
+          setError('Something went wrong')
         }
       }
     })
-
   }
 
   return (
@@ -81,9 +80,7 @@ export function ForgotPasswordForm({ className, ...props }: React.ComponentProps
                 </Field>
               )}
             />
-            {!!success && (
-              <SuccessAlert message={success} />
-            )}
+            {!!success && <SuccessAlert message={success} />}
             {!!error && <ErrorAlert message={error} />}
             <Field>
               <SubmitButton label="Send Mail" pending={isPending} />

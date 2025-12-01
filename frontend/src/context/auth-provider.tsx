@@ -1,24 +1,25 @@
-import { useAuth } from "@/hooks/use-auth"
-import type React from "react"
-import { createContext, useContext } from "react"
+import type React from 'react'
+import { createContext, useContext } from 'react'
+
+import { useAuth } from '@/hooks/use-auth'
 
 type Session = {
-  ip: string,
-  browser: string,
+  ip: string
+  browser: string
   user: {
-    id: string,
-    name: string,
-    email: string,
-    isVerified: boolean,
-    is2FAEnabled: boolean,
-    createdAt: Date,
+    id: string
+    name: string
+    email: string
+    isVerified: boolean
+    is2FAEnabled: boolean
+    createdAt: Date
     expiredAt: Date
   }
 }
 
 type TAuthContext = {
-  session: Session | undefined,
-  isLoading: boolean,
+  session: Session | undefined
+  isLoading: boolean
   isAuthenticated: boolean
 }
 

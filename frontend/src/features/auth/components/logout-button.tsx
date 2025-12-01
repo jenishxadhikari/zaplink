@@ -1,10 +1,12 @@
-import { Button } from "@/components/ui/button";
-import { logoutMutation } from "@/lib/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import { LoaderCircle } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
+import { LoaderCircle } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
+
+import { logoutMutation } from '@/lib/api'
+
+import { Button } from '@/components/ui/button'
 
 export function Logout() {
   const navigate = useNavigate()
@@ -16,13 +18,13 @@ export function Logout() {
       toast.success(response.data.message)
       localStorage.removeItem('accessToken')
       queryClient.resetQueries({ queryKey: ['auth'] })
-      navigate("/")
+      navigate('/')
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
         toast.error(error.response?.data?.message)
       } else {
-        toast.error("Something went wrong")
+        toast.error('Something went wrong')
       }
     }
   })
@@ -32,7 +34,7 @@ export function Logout() {
   }
 
   return (
-    <Button variant='destructive' size='sm' disabled={isPending} onClick={handleLogout}>
+    <Button variant="destructive" size="sm" disabled={isPending} onClick={handleLogout}>
       {isPending && <LoaderCircle className="size-4 animate-spin" />} Logout
     </Button>
   )

@@ -1,13 +1,14 @@
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
+import { useAuthContext } from '@/context/auth-provider'
+
 import { MaxWidthWrapper } from './max-width-wrapper'
 import { buttonVariants } from './ui/button'
-import { useAuthContext } from '@/context/auth-provider'
 
 export function Navbar() {
   const { isAuthenticated } = useAuthContext()
-  
+
   return (
     <nav className="h-15 border-b">
       <MaxWidthWrapper className="flex items-center justify-between">

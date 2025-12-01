@@ -1,8 +1,11 @@
 import { useState } from 'react'
 
+import { useMutation } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import { useForm } from 'react-hook-form'
 import { Link, useSearchParams } from 'react-router-dom'
 
+import { verifyEmailMutation } from '@/lib/api'
 import { cn } from '@/lib/utils'
 
 import { Field, FieldDescription, FieldGroup } from '@/components/ui/field'
@@ -11,9 +14,6 @@ import { SubmitButton } from '@/components/submit-button'
 import { SuccessAlert } from '@/components/success-alert'
 
 import { AuthWrapper } from './auth-wrapper'
-import { useMutation } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
-import { verifyEmailMutation } from '@/lib/api'
 
 export function VerifyEmailForm({ className, ...props }: React.ComponentProps<'div'>) {
   const [searchParams] = useSearchParams()
@@ -43,7 +43,7 @@ export function VerifyEmailForm({ className, ...props }: React.ComponentProps<'d
         if (error instanceof AxiosError) {
           setError(error.response?.data?.message)
         } else {
-          setError("Something went wrong")
+          setError('Something went wrong')
         }
       }
     })

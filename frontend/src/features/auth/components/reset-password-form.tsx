@@ -1,11 +1,14 @@
 import { useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import { Eye, EyeOff } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import { Link, useSearchParams } from 'react-router-dom'
 import { z } from 'zod'
 
+import { resetPasswordMutation } from '@/lib/api'
 import { cn } from '@/lib/utils'
 
 import { Button } from '@/components/ui/button'
@@ -18,14 +21,11 @@ import { SuccessAlert } from '@/components/success-alert'
 import { resetPasswordSchema } from '@/features/auth/schema'
 
 import { AuthWrapper } from './auth-wrapper'
-import { resetPasswordMutation } from '@/lib/api'
-import { useMutation } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
 
 export function ResetPasswordForm({ className, ...props }: React.ComponentProps<'div'>) {
   const [searchParams] = useSearchParams()
   const token = searchParams.get('token')
-  if(!token){
+  if (!token) {
     return null
   }
   const safeToken = token as string
@@ -65,7 +65,7 @@ export function ResetPasswordForm({ className, ...props }: React.ComponentProps<
         if (error instanceof AxiosError) {
           setError(error.response?.data?.message)
         } else {
-          setError("Something went wrong")
+          setError('Something went wrong')
         }
       }
     })
@@ -91,7 +91,7 @@ export function ResetPasswordForm({ className, ...props }: React.ComponentProps<
                       id={field.name}
                       aria-invalid={fieldState.invalid}
                       placeholder="********"
-                      type={showPassword ? "text" : "password"}
+                      type={showPassword ? 'text' : 'password'}
                       autoComplete="off"
                       disabled={isPending}
                     />
@@ -122,7 +122,7 @@ export function ResetPasswordForm({ className, ...props }: React.ComponentProps<
                       id={field.name}
                       aria-invalid={fieldState.invalid}
                       placeholder="********"
-                      type={showConfirmPassword ? "text" : "password"}
+                      type={showConfirmPassword ? 'text' : 'password'}
                       autoComplete="off"
                       disabled={isPending}
                     />
