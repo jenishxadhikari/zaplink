@@ -133,18 +133,20 @@ const refresh = asyncHandler(async (req: Request, res: Response) => {
 })
 
 /*
-    GET /api/v1/auth/me - Generate session data
+    GET /api/v1/auth/session - Generate session data
 */
-const me = asyncHandler(async (req: Request, res: Response) => {
+const session = asyncHandler(async (req: Request, res: Response) => {
   const user = req.user
   const ip = req.ip
   const browser = req.headers['user-agent']
 
   return res.status(StatusCodes.OK).json({
-    ip: ip,
-    browser: browser,
     data: {
-      ...user
+      ip: ip,
+      browser: browser,
+      user: {
+        ...user
+      }
     },
     message: 'User data retrieved successfully.'
   })
@@ -189,9 +191,9 @@ const forgotPassword = asyncHandler(async (req: Request, res: Response) => {
 
   const user = await UserQueries.getUserByEmail(email)
   if (!user) {
-    throw new CustomError.BadRequestError(
-      "If an account with that email exists, we've sent password reset instructions."
-    )
+    return res.status(StatusCodes.OK).json({
+      message: `If an account with that email exists, we've sent password reset instructions.`
+    })
   }
 
   await AuthService.sendResetPasswordMail({
@@ -244,7 +246,7 @@ export const AuthController = {
   login,
   logout,
   refresh,
-  me,
+  session,
   verifyEmail,
   forgotPassword,
   resetPassword

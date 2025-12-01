@@ -26,6 +26,6 @@ router
 
 router.route('/auth/logout').post(authentication, AuthController.logout)
 
-router.route('/auth/me').get(authentication, AuthController.me)
+router.route('/auth/session').get(authentication, AuthController.session)
 
 export { router as AuthRouter }

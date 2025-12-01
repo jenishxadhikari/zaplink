@@ -22,8 +22,6 @@ export async function authentication(req: Request, res: Response, next: NextFunc
   }
 
   const user = await UserQueries.getUserById(payload.id)
-  console.log(user)
-
   if (!user) {
     return res.status(StatusCodes.UNAUTHORIZED).json({
       message: 'Please login again to continue.'
