@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
-import { LoaderCircle } from 'lucide-react'
+import { LoaderCircle, LogOut } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
@@ -34,7 +34,14 @@ export function Logout() {
   }
 
   return (
-    <Button variant="destructive" size="sm" disabled={isPending} onClick={handleLogout}>
+    <Button
+      variant="ghost"
+      size="sm"
+      className="w-full justify-start"
+      disabled={isPending}
+      onClick={handleLogout}
+    >
+      <LogOut />
       {isPending && <LoaderCircle className="size-4 animate-spin" />} Logout
     </Button>
   )

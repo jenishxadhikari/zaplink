@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
+import { Dashboard } from '@/components/layout/dashboard'
 import { Main } from '@/components/layout/main'
 
 import ForgotPassword from '@/pages/auth/forgot-password'
@@ -9,7 +10,9 @@ import ResetPassword from '@/pages/auth/reset-password'
 import VerifyEmail from '@/pages/auth/verify-email'
 import VerifyOTP from '@/pages/auth/verify-otp'
 import Home from '@/pages/home'
-import Dashboard from '@/pages/protected/dashboard'
+import Analytics from '@/pages/protected/analytics'
+import Links from '@/pages/protected/links'
+import Settings from '@/pages/protected/settings'
 import ProtectedRoute from '@/routes/protected.route'
 import PublicRoute from '@/routes/public.route'
 
@@ -30,8 +33,12 @@ export default function App() {
           </Route>
         </Route>
 
-        <Route element={<ProtectedRoute />}>
-          <Route element={<Dashboard />} path="dashboard" />
+        <Route element={<Dashboard />} path="dashboard">
+          <Route element={<ProtectedRoute />}>
+            <Route element={<Links />} path="" />
+            <Route element={<Analytics />} path="analytics" />
+            <Route element={<Settings />} path="settings" />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

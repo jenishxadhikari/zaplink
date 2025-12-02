@@ -11,15 +11,18 @@ import { AuthProvider } from '@/context/auth-provider.tsx'
 import QueryProvider from '@/context/query-provider.tsx'
 
 import App from './app.tsx'
+import { ThemeProvider } from './context/theme-provider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <QueryProvider>
-      <AuthProvider>
-        <App />
-        <Toaster />
-      </AuthProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryProvider>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <QueryProvider>
+        <AuthProvider>
+          <App />
+          <Toaster />
+        </AuthProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryProvider>
+    </ThemeProvider>
   </StrictMode>
 )
