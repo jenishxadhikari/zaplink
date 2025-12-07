@@ -9,7 +9,7 @@ import {
   EmptyTitle
 } from '@/components/ui/empty'
 
-import { CreateLinkDialog } from '@/features/dashboard/components/create-link-dialog'
+import { CreateLinkDialog } from '@/features/links/components/create-link-dialog'
 
 export function EmptyLinkBox() {
   return (

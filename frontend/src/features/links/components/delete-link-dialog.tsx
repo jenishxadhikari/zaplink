@@ -1,7 +1,12 @@
 import { useState } from 'react'
 
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import { LoaderCircle, Trash } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+
+import { deleteLinkMutation } from '@/lib/api'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -16,21 +21,35 @@ import {
 } from '@/components/ui/dialog'
 import { ErrorAlert } from '@/components/error-alert'
 
-export function DeleteLinkDialog() {
+interface DeleteLinkDialogProps {
+  shortUrlKey: string
+}
+
+export function DeleteLinkDialog({ shortUrlKey }: DeleteLinkDialogProps) {
   const [error, setError] = useState<string | null>(null)
 
   const form = useForm()
 
-  const isPending = form.formState.isSubmitting
+  const queryClient = useQueryClient()
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: () => deleteLinkMutation(shortUrlKey),
+    onSuccess: (response) => {
+      toast.success(response.data.message)
+      queryClient.refetchQueries({ queryKey: ['links'] })
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        setError(error.response?.data?.message)
+      } else {
+        setError('Something went wrong')
+      }
+    }
+  })
 
   async function onSubmit() {
     setError(null)
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log('Deleted')
-        resolve(true)
-      }, 2000)
-    })
+    mutate()
   }
 
   return (

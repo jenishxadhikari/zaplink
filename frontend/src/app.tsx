@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import { Dashboard } from '@/components/layout/dashboard'
 import { Main } from '@/components/layout/main'
+import { NotFound } from '@/components/not-found'
 
 import ForgotPassword from '@/pages/auth/forgot-password'
 import Login from '@/pages/auth/login'
@@ -15,11 +16,20 @@ import Links from '@/pages/protected/links'
 import Settings from '@/pages/protected/settings'
 import ProtectedRoute from '@/routes/protected.route'
 import PublicRoute from '@/routes/public.route'
+import Redirect from '@/pages/redirect'
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route element={<Dashboard />}>
+          <Route element={<ProtectedRoute />} path="dashboard">
+            <Route element={<Links />} path="" />
+            <Route element={<Analytics />} path="analytics" />
+            <Route element={<Settings />} path="settings" />
+          </Route>
+        </Route>
+
         <Route element={<Main />}>
           <Route element={<Home />} path="" />
 
@@ -31,14 +41,10 @@ export default function App() {
             <Route element={<VerifyEmail />} path="email/verify" />
             <Route element={<VerifyOTP />} path="2fa/verify" />
           </Route>
-        </Route>
 
-        <Route element={<Dashboard />} path="dashboard">
-          <Route element={<ProtectedRoute />}>
-            <Route element={<Links />} path="" />
-            <Route element={<Analytics />} path="analytics" />
-            <Route element={<Settings />} path="settings" />
-          </Route>
+          <Route element={<Redirect />} path="/:shortUrlKey" />
+
+          <Route element={<NotFound />} path='*' />
         </Route>
       </Routes>
     </BrowserRouter>

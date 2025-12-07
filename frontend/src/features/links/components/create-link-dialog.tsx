@@ -1,9 +1,14 @@
 import { useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Edit } from 'lucide-react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
+import { Plus } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
+
+import { createShortLinkMutation } from '@/lib/api'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -18,40 +23,54 @@ import {
 } from '@/components/ui/dialog'
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
-import { Switch } from '@/components/ui/switch'
 import { ErrorAlert } from '@/components/error-alert'
 import { SubmitButton } from '@/components/submit-button'
 
-import { updateLinkSchema } from '@/features/dashboard/schema'
+import { createLinkSchema } from '@/features/links/schema'
 
-export function UpdateLinkDialog() {
+export function CreateLinkDialog() {
   const [error, setError] = useState<string | null>(null)
+  const [open, setOpen] = useState<boolean>(false)
 
-  const form = useForm<z.infer<typeof updateLinkSchema>>({
-    resolver: zodResolver(updateLinkSchema),
+  const form = useForm<z.infer<typeof createLinkSchema>>({
+    resolver: zodResolver(createLinkSchema),
     defaultValues: {
       title: '',
-      isActive: false
+      originalUrl: ''
     }
   })
 
-  const isPending = form.formState.isSubmitting
+  const { mutate, isPending } = useMutation({
+    mutationFn: createShortLinkMutation
+  })
 
-  async function onSubmit(data: z.infer<typeof updateLinkSchema>) {
+  const queryClient = useQueryClient()
+
+  async function onSubmit(data: z.infer<typeof createLinkSchema>) {
     setError(null)
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log(data)
-        resolve(true)
-      }, 2000)
+    mutate(data, {
+      onSuccess: (response) => {
+        toast.success(response.data.message)
+        form.reset()
+        queryClient.refetchQueries({ queryKey: ['links'] })
+        setOpen(false)
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          setError(error.response?.data?.message)
+        } else {
+          setError('Something went wrong')
+        }
+      }
     })
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" variant="ghost" className="h-7 w-7 shrink-0 p-0">
-          <Edit className="text-green-500" />
+        <Button>
+          <Plus />
+          Create Link
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -83,19 +102,18 @@ export function UpdateLinkDialog() {
               )}
             />
             <Controller
-              name="isActive"
+              name="originalUrl"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid} className="flex-row">
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Long Url</FieldLabel>
+                  <Input
+                    {...field}
                     id={field.name}
                     aria-invalid={fieldState.invalid}
+                    placeholder="Eg. https://www.youtube.com"
                     disabled={isPending}
-                    className="w-8!"
                   />
-                  <FieldLabel htmlFor={field.name}>Active</FieldLabel>
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}
@@ -105,7 +123,7 @@ export function UpdateLinkDialog() {
               <DialogClose asChild>
                 <Button variant="outline">Cancel</Button>
               </DialogClose>
-              <SubmitButton label="Update Link" className="w-full md:w-fit" pending={isPending} />
+              <SubmitButton label="Create Link" className="w-full md:w-fit" pending={isPending} />
             </DialogFooter>
           </FieldGroup>
         </form>
