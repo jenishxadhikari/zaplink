@@ -1,12 +1,12 @@
-import { app } from '@/app'
 import { connectDB } from '@/db'
 import { env } from '@/config/env'
+import { server } from '@/lib/socket'
 
 (async function () {
   try {
     await connectDB()
 
-    app.listen(env.PORT, () => {
+    server.listen(env.PORT, () => {
       console.log(`Server running at port: ${env.PORT}`)
     })
   } catch (error) {
