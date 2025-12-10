@@ -6,8 +6,7 @@ export function useAuth() {
   const query = useQuery({
     queryKey: ['auth'],
     queryFn: sessionQuery,
-    staleTime: Infinity,
-    retry: 1
+    staleTime: Infinity
   })
 
   return query

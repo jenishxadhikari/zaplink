@@ -12,7 +12,7 @@ type CreateShortUrl = {
 
 async function createShortUrl({ title, originalUrl, userId, expiresAt }: CreateShortUrl) {
   const shortUrlKey = crypto.randomBytes(6).toString('base64url')
-  
+
   const url = await UrlQueries.createUrl({
     title,
     shortUrlKey,

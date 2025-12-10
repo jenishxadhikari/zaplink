@@ -37,8 +37,8 @@ export function AppSidebar() {
     return null
   }
   const user = {
-    name: session?.user.name,
-    email: session?.user.email
+    name: session.name,
+    email: session.email
   }
 
   return (

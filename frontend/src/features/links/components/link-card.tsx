@@ -4,14 +4,15 @@ import { Check, Copy, Eye, EyeOff, TrendingUp } from 'lucide-react'
 
 import { env } from '@/config/env'
 
+import { socket } from '@/hooks/use-socket'
+import { useAuthContext } from '@/context/auth-provider'
+
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 import { DeleteLinkDialog } from '@/features/links/components/delete-link-dialog'
 import { UpdateLinkDialog } from '@/features/links/components/update-link-dialog'
-import { socket } from '@/hooks/use-socket'
-import { useAuthContext } from '@/context/auth-provider'
 
 interface LinkCardProps {
   id: string
@@ -38,9 +39,9 @@ export function LinkCard({
   }
 
   useEffect(() => {
-    socket.auth = { userId: session.user.id }
-  }, [session.user.id])
-  
+    socket.auth = { userId: session.id }
+  }, [session.id])
+
   const [copiedId, setCopiedId] = useState<string | null>(null)
   const [count, setCount] = useState(clicks)
 
@@ -51,7 +52,7 @@ export function LinkCard({
   }
 
   useEffect(() => {
-    const listener = (data: { shortUrlKey: string, clicks: number }) => {
+    const listener = (data: { shortUrlKey: string; clicks: number }) => {
       if (shortUrlKey === data.shortUrlKey) {
         setCount(data.clicks)
       }
@@ -67,8 +68,9 @@ export function LinkCard({
   return (
     <Card
       key={id}
-      className={`hover:border-primary/40 border backdrop-blur-sm transition-all duration-300 hover:shadow-lg ${isActive ? 'bg-card/80 border-border' : 'bg-card/60 border-border/50 opacity-75'
-        }`}
+      className={`hover:border-primary/40 border backdrop-blur-sm transition-all duration-300 hover:shadow-lg ${
+        isActive ? 'bg-card/80 border-border' : 'bg-card/60 border-border/50 opacity-75'
+      }`}
     >
       <CardHeader>
         <div className="flex items-center justify-between gap-2">
@@ -102,7 +104,7 @@ export function LinkCard({
               rel="noopener noreferrer"
               className="text-primary truncate font-mono text-sm hover:underline"
             >
-              {env.BASE_URL}/r/{shortUrlKey}
+              {env.BASE_URL}/{shortUrlKey}
             </a>
             <Button
               size="sm"

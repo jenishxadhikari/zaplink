@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { Edit } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
+import { useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
@@ -30,6 +31,10 @@ import { SubmitButton } from '@/components/submit-button'
 import { updateLinkSchema } from '@/features/links/schema'
 
 export function UpdateLinkDialog({ shortUrlKey }: { shortUrlKey: string }) {
+  const [searchParams] = useSearchParams()
+  let page = searchParams.get('page') ?? 1
+  page = Number(page)
+
   const [error, setError] = useState<string | null>(null)
   const [open, setOpen] = useState<boolean>(false)
   const queryClient = useQueryClient()
@@ -50,22 +55,17 @@ export function UpdateLinkDialog({ shortUrlKey }: { shortUrlKey: string }) {
     queryFn: () => getLinkQuery(shortUrlKey),
     queryKey: ['updateLink', shortUrlKey]
   })
-  if (!data) {
-    return null
-  }
 
   function handleOpenChange(state: boolean) {
     setOpen(state)
-    refetch()
     if (state) {
-      const d = data?.data.data
+      const d = data?.data
       form.reset({
-        title: d.title,
-        isActive: d.isActive
+        title: d?.title,
+        isActive: d?.isActive
       })
     }
   }
-
 
   async function onSubmit(data: z.infer<typeof updateLinkSchema>) {
     const payload = {
@@ -75,9 +75,9 @@ export function UpdateLinkDialog({ shortUrlKey }: { shortUrlKey: string }) {
     setError(null)
     mutate(payload, {
       onSuccess: (response) => {
-        toast.success(response.data.message)
+        toast.success(response.message)
         form.reset()
-        queryClient.refetchQueries({ queryKey: ['links'] })
+        queryClient.invalidateQueries({ queryKey: ['links', page] })
         refetch()
         setOpen(false)
       },

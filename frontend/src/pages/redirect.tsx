@@ -18,7 +18,7 @@ export default function Redirect() {
   })
 
   if (isSuccess) {
-    window.location.replace(data.data.url)
+    window.location.replace(data.url)
   }
 
   if (isError) {

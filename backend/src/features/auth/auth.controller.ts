@@ -137,16 +137,10 @@ const refresh = asyncHandler(async (req: Request, res: Response) => {
 */
 const session = asyncHandler(async (req: Request, res: Response) => {
   const user = req.user
-  const ip = req.ip
-  const browser = req.headers['user-agent']
 
   return res.status(StatusCodes.OK).json({
     data: {
-      ip: ip,
-      browser: browser,
-      user: {
-        ...user
-      }
+      ...user
     },
     message: 'User data retrieved successfully.'
   })

@@ -1,4 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
 import { useSearchParams } from 'react-router-dom'
+
+import { getLinksQuery } from '@/lib/api'
 
 import {
   Pagination,
@@ -9,13 +12,21 @@ import {
   PaginationPrevious
 } from '@/components/ui/pagination'
 
-interface LinksPaginationProps {
-  page: number
-  totalPages: number
-}
+export function LinksPagination() {
+  const [searchParams, setSearchParams] = useSearchParams()
+  let page = searchParams.get('page') ?? 1
+  page = Number(page)
 
-export function LinksPagination({ page, totalPages }: LinksPaginationProps) {
-  const [, setSearchParams] = useSearchParams()
+  const { data } = useQuery({
+    queryKey: ['links', page],
+    queryFn: () => getLinksQuery(page),
+    staleTime: Infinity
+  })
+  if (!data) {
+    return null
+  }
+
+  const totalPages = data.meta.totalPages
 
   const goToPage = (p: number) => {
     const safePage = Math.max(1, Math.min(totalPages, p))

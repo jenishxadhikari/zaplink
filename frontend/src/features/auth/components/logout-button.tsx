@@ -15,7 +15,7 @@ export function Logout() {
   const { mutate, isPending } = useMutation({
     mutationFn: logoutMutation,
     onSuccess: (response) => {
-      toast.success(response.data.message)
+      toast.success(response.message)
       localStorage.removeItem('accessToken')
       queryClient.resetQueries({ queryKey: ['auth'] })
       navigate('/')

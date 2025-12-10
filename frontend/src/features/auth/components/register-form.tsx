@@ -49,7 +49,7 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<'div'
     setShowConfirmPassword(false)
     mutate(data, {
       onSuccess: (response) => {
-        setSuccess(response.data.message)
+        setSuccess(response.message)
         form.reset()
       },
       onError: (error) => {

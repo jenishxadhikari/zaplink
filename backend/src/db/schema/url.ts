@@ -2,8 +2,9 @@ import { model, Schema, Types } from 'mongoose'
 
 const urlSchema = new Schema(
   {
-    title:{
-      type: String
+    title: {
+      type: String,
+      default: ""
     },
     shortUrlKey: {
       type: String,
@@ -14,7 +15,7 @@ const urlSchema = new Schema(
       type: String,
       required: true
     },
-    isActive:{
+    isActive: {
       type: Boolean,
       default: true
     },

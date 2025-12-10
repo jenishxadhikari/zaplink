@@ -40,7 +40,7 @@ export function ForgotPasswordForm({ className, ...props }: React.ComponentProps
     setSuccess(null)
     mutate(data, {
       onSuccess: (response) => {
-        setSuccess(response.data.message)
+        setSuccess(response.message)
         form.reset()
       },
       onError: (error) => {

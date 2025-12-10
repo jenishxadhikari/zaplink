@@ -21,7 +21,7 @@ const APIRefresh = axios.create(options)
 APIRefresh.interceptors.response.use((response) => response)
 
 API.interceptors.response.use(
-  (response) => response,
+  (response) => response.data,
   async (error) => {
     const originalRequest = error.config
     if (error.response?.status === 401 && !originalRequest._retry) {

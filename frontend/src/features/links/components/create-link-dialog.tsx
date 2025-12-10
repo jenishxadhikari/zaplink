@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -32,11 +32,20 @@ export function CreateLinkDialog() {
   const [error, setError] = useState<string | null>(null)
   const [open, setOpen] = useState<boolean>(false)
 
+  const originalUrl = sessionStorage.getItem('originalUrl')
+
+  useEffect(() => {
+    if (originalUrl) {
+      setOpen(true)
+      sessionStorage.removeItem('originalUrl')
+    }
+  }, [originalUrl])
+
   const form = useForm<z.infer<typeof createLinkSchema>>({
     resolver: zodResolver(createLinkSchema),
     defaultValues: {
       title: '',
-      originalUrl: ''
+      originalUrl: originalUrl ?? ''
     }
   })
 
@@ -50,9 +59,9 @@ export function CreateLinkDialog() {
     setError(null)
     mutate(data, {
       onSuccess: (response) => {
-        toast.success(response.data.message)
+        toast.success(response.message)
         form.reset()
-        queryClient.refetchQueries({ queryKey: ['links'] })
+        queryClient.invalidateQueries({ queryKey: ['links'] })
         setOpen(false)
       },
       onError: (error) => {

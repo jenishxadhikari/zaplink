@@ -1,9 +1,10 @@
+import { useEffect } from 'react'
+
 import { Loader } from 'lucide-react'
 import { Navigate, Outlet } from 'react-router-dom'
 
-import { useAuthContext } from '@/context/auth-provider'
 import { socket } from '@/hooks/use-socket'
-import { useEffect } from 'react'
+import { useAuthContext } from '@/context/auth-provider'
 
 export default function ProtectedRoute() {
   const { isAuthenticated, isLoading, session } = useAuthContext()
@@ -12,14 +13,14 @@ export default function ProtectedRoute() {
     if (isLoading) return
     if (!isAuthenticated || !session) return
 
-    socket.auth = { userId: session.user.id }
+    socket.auth = { userId: session.id }
     socket.connect()
 
     return () => {
       socket.disconnect()
     }
-  }, [isLoading, isAuthenticated, session?.user.id])
-  
+  }, [isLoading, isAuthenticated, session?.id])
+
   if (isLoading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-[rgba(255,255,255,.2)] text-2xl backdrop-blur-sm">

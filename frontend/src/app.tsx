@@ -14,9 +14,9 @@ import Home from '@/pages/home'
 import Analytics from '@/pages/protected/analytics'
 import Links from '@/pages/protected/links'
 import Settings from '@/pages/protected/settings'
+import Redirect from '@/pages/redirect'
 import ProtectedRoute from '@/routes/protected.route'
 import PublicRoute from '@/routes/public.route'
-import Redirect from '@/pages/redirect'
 
 export default function App() {
   return (
@@ -44,7 +44,7 @@ export default function App() {
 
           <Route element={<Redirect />} path="/:shortUrlKey" />
 
-          <Route element={<NotFound />} path='*' />
+          <Route element={<NotFound />} path="*" />
         </Route>
       </Routes>
     </BrowserRouter>

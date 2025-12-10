@@ -49,13 +49,15 @@ export function LoginForm({ className, ...props }: React.ComponentProps<'div'>) 
     setShowPassword(false)
     mutate(data, {
       onSuccess: (response) => {
-        toast.success(response.data.message)
-        localStorage.setItem('accessToken', response.data.accessToken)
-        queryClient.resetQueries({ queryKey: ['auth'] })
+        toast.success(response.message)
+        localStorage.setItem('accessToken', response.accessToken)
+        queryClient.invalidateQueries({ queryKey: ['auth'] })
         form.reset()
         navigate(redirectTo)
       },
       onError: (error) => {
+        console.log(error)
+
         if (error instanceof AxiosError) {
           setError(error.response?.data?.message)
         } else {

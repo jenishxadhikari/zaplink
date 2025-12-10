@@ -28,6 +28,7 @@ app.use('/api/v1', AuthRouter)
 app.use('/api/v1', UrlRouter)
 
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+  console.log(req.url);
   console.log(error)
   if (error instanceof ApiError) {
     return ApiError.handle(error, res)

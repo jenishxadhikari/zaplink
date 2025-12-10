@@ -27,6 +27,7 @@ interface DeleteLinkDialogProps {
 
 export function DeleteLinkDialog({ shortUrlKey }: DeleteLinkDialogProps) {
   const [error, setError] = useState<string | null>(null)
+  const [open, setOpen] = useState(false)
 
   const form = useForm()
 
@@ -35,8 +36,9 @@ export function DeleteLinkDialog({ shortUrlKey }: DeleteLinkDialogProps) {
   const { mutate, isPending } = useMutation({
     mutationFn: () => deleteLinkMutation(shortUrlKey),
     onSuccess: (response) => {
-      toast.success(response.data.message)
-      queryClient.refetchQueries({ queryKey: ['links'] })
+      toast.success(response.message)
+      setOpen(false)
+      queryClient.invalidateQueries({ queryKey: ['links'] })
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
@@ -53,7 +55,7 @@ export function DeleteLinkDialog({ shortUrlKey }: DeleteLinkDialogProps) {
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button size="sm" variant="ghost" className="h-7 w-7 shrink-0 p-0">
           <Trash className="text-red-500" />

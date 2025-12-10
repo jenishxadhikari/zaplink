@@ -2,7 +2,7 @@ import { connectDB } from '@/db'
 import { env } from '@/config/env'
 import { server } from '@/lib/socket'
 
-(async function () {
+;(async function () {
   try {
     await connectDB()
 

@@ -9,10 +9,12 @@ import { UrlController } from './url.controller'
 const router = Router()
 
 router
-.route('/urls')
-.post(authentication, validation(UrlSchema.createUrlSchema), UrlController.createUrl)
+  .route('/urls')
+  .post(authentication, validation(UrlSchema.createUrlSchema), UrlController.createUrl)
 
 router.route('/urls').get(authentication, UrlController.getUrls)
+
+router.route('/urls/stats').get(authentication, UrlController.getUrlStats)
 
 router.route('/urls/:shortUrlKey').get(authentication, UrlController.getUrl)
 router.route('/urls/:shortUrlKey').patch(authentication, UrlController.updateUrl)

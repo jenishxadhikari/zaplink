@@ -66,25 +66,22 @@ const getUrls = asyncHandler(async (req: Request, res: Response) => {
   const userId = new Types.ObjectId(user.id)
 
   const page = Number(req.query.page) ?? 1
-  const pageSize = 6
-  const skip = pageSize * (page - 1)
+  const size = 6
+  const skip = size * (page - 1)
 
   const urls = await UrlQueries.getUrls({
     userId,
     skip
   })
 
-  const totalUrls = await UrlQueries.getTotalUrls(userId)
+  const totalUrls = await UrlQueries.getTotalUrls(user.id)
 
   return res.status(StatusCodes.OK).json({
-    urls: {
-      ...urls
-    },
-    metadata: {
+    data: urls,
+    meta: {
       page: page,
-      page_size: pageSize,
-      total_pages: Math.ceil(totalUrls / pageSize),
-      total_count: totalUrls
+      size: size,
+      totalPages: Math.ceil(totalUrls / size),
     },
     message: `URL's fetched successfully.`
   })
@@ -151,11 +148,29 @@ const deleteUrl = asyncHandler(async (req: Request, res: Response) => {
   })
 })
 
+const getUrlStats = asyncHandler(async (req: Request, res: Response) => {
+  const user = req.user
+
+  const totalUrls = await UrlQueries.getTotalUrls(user.id)
+  const totalClicks = await UrlQueries.getTotalClicks(user.id)
+  const totalActiveLinks = await UrlQueries.getTotalActiveClicks(user.id)
+
+  return res.status(StatusCodes.OK).json({
+    data: {
+      totalLinks: totalUrls,
+      totalClicks: totalClicks,
+      totalActiveLinks: totalActiveLinks
+    },
+    message: `URL's stats fetched successfully.`
+  })
+})
+
 export const UrlController = {
   createUrl,
   getUrl,
   updateUrl,
   deleteUrl,
   getUrls,
+  getUrlStats,
   redirectToOriginalUrl
 }

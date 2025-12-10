@@ -37,7 +37,7 @@ export function VerifyEmailForm({ className, ...props }: React.ComponentProps<'d
     setSuccess(null)
     mutate(safeToken, {
       onSuccess: (response) => {
-        setSuccess(response.data.message)
+        setSuccess(response.message)
       },
       onError: (error) => {
         if (error instanceof AxiosError) {

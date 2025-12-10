@@ -4,17 +4,13 @@ import { createContext, useContext } from 'react'
 import { useAuth } from '@/hooks/use-auth'
 
 type Session = {
-  ip: string
-  browser: string
-  user: {
-    id: string
-    name: string
-    email: string
-    isVerified: boolean
-    is2FAEnabled: boolean
-    createdAt: Date
-    expiredAt: Date
-  }
+  id: string
+  name: string
+  email: string
+  isVerified: boolean
+  is2FAEnabled: boolean
+  createdAt: Date
+  updatedAt: Date
 }
 
 type TAuthContext = {
@@ -32,11 +28,11 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const { data, isLoading } = useAuth()
 
-  const sessionData = data?.data?.data
+  const sessionData = data?.data
   const isAuthenticated = !!sessionData
 
   return (
-    <AuthContext.Provider value={{ session: sessionData!, isLoading, isAuthenticated }}>
+    <AuthContext.Provider value={{ session: sessionData, isLoading, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   )

@@ -58,7 +58,7 @@ export function ResetPasswordForm({ className, ...props }: React.ComponentProps<
     }
     mutate(payload, {
       onSuccess: (response) => {
-        setSuccess(response.data.message)
+        setSuccess(response.message)
         form.reset()
       },
       onError: (error) => {
