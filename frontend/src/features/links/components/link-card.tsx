@@ -1,11 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { Check, Copy, Eye, EyeOff, TrendingUp } from 'lucide-react'
 
 import { env } from '@/config/env'
-
-import { socket } from '@/hooks/use-socket'
-import { useAuthContext } from '@/context/auth-provider'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -33,37 +30,13 @@ export function LinkCard({
   clicks,
   createdAt
 }: LinkCardProps) {
-  const { session } = useAuthContext()
-  if (!session) {
-    return null
-  }
-
-  useEffect(() => {
-    socket.auth = { userId: session.id }
-  }, [session.id])
-
   const [copiedId, setCopiedId] = useState<string | null>(null)
-  const [count, setCount] = useState(clicks)
 
   const copyToClipboard = (text: string, linkId: string) => {
     navigator.clipboard.writeText(text)
     setCopiedId(linkId)
     setTimeout(() => setCopiedId(null), 2000)
   }
-
-  useEffect(() => {
-    const listener = (data: { shortUrlKey: string; clicks: number }) => {
-      if (shortUrlKey === data.shortUrlKey) {
-        setCount(data.clicks)
-      }
-    }
-
-    socket.on('click-updated', listener)
-
-    return () => {
-      socket.off('click-updated', listener)
-    }
-  }, [shortUrlKey])
 
   return (
     <Card
@@ -129,7 +102,7 @@ export function LinkCard({
             <p className="text-muted-foreground text-xs font-medium">Clicks</p>
             <div className="mt-1 flex items-center gap-1.5">
               <TrendingUp className="text-chart-1/70 h-4 w-4" />
-              <p className="text-foreground text-2xl font-bold">{count}</p>
+              <p className="text-foreground text-2xl font-bold">{clicks}</p>
             </div>
           </div>
           <div className="text-right">

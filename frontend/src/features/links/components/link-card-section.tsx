@@ -1,7 +1,14 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
+
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { useSearchParams } from 'react-router-dom'
+import type z from 'zod'
 
 import { getLinksQuery } from '@/lib/api'
+
+import { socket } from '@/hooks/use-socket'
+
+import type { linkSchema } from '@/features/links/schema'
 
 import { EmptyLinkBox } from './empty-link-box'
 import { LinkCard } from './link-card'
@@ -11,6 +18,8 @@ export function LinkCardSection() {
   let page = searchParams.get('page') ?? 1
   page = Number(page)
 
+  const queryClient = useQueryClient()
+
   const { data } = useSuspenseQuery({
     queryKey: ['links', page],
     queryFn: () => getLinksQuery(page),
@@ -19,7 +28,26 @@ export function LinkCardSection() {
 
   const links = data.data
 
-  // const totalPages = data.meta.totalPages
+  useEffect(() => {
+    function listener(data: { shortUrlKey: string; clicks: number }) {
+      queryClient.setQueryData(['links', page], (links: z.infer<typeof linkSchema>) => {
+        if (!links) return links
+
+        return {
+          ...links,
+          data: links.data.map((link: any) =>
+            link.shortUrlKey === data.shortUrlKey ? { ...link, clicks: data.clicks } : link
+          )
+        }
+      })
+    }
+
+    socket.on('click-updated', listener)
+
+    return () => {
+      socket.off('click-updated', listener)
+    }
+  }, [queryClient, page])
 
   return (
     <div className="flex h-full flex-col py-2">
